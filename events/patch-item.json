@@ -1,0 +1,4 @@
+{
+  "httpMethod": "POST",
+  "body": "[{\"op\":\"replace\",\"path\":\"/inbound\",\"value\":{\"save\":true}}]"
+}

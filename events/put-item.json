@@ -1,0 +1,7 @@
+{
+  "httpMethod": "PUT",
+  "body": "{\"inbound\":{\"forwardTargets\":[\"some@email.address\"],\"save\":true},\"outbound\":{\"ccTargets\":[\"another@email.address\"],\"save\":true}}",
+  "pathParameters": {
+    "accountId": "accountId"
+  }
+}

@@ -1,0 +1,234 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  emails-accounts-api
+
+Transform:
+  - AWS::Serverless-2016-10-31
+
+Parameters:
+  Subdomain:
+    Type: String
+    Default: emails-accounts-api
+    AllowedValues:
+      - emails-accounts-api
+      - emails-accounts-api-test
+    Description: Subdomain to use for API
+
+Resources:
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      Auth:
+        ApiKeyRequired: true # sets for all methods
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: Usage plan for emails-accounts-api
+      Domain:
+        DomainName: !Sub ${Subdomain}.bowland.link
+        CertificateArn: arn:aws:acm:us-east-1:494887012091:certificate/7f4606f7-302c-40a8-ac9d-e63db9b7a712
+        EndpointConfiguration: EDGE
+        Route53:
+          HostedZoneId: Z01312547RGU1BYKIJXY
+        BasePath:
+          - /v1
+
+  DeleteItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/delete-item.deleteByIdHandler
+      CodeUri: './dist'
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: emails-accounts-api delete by ID
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SampleTable
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SampleTable
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /accounts/{accountsId}
+            Method: delete
+            Auth:
+              ApiKeyRequired: true
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
+
+  DeleteItemLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: DeleteItemFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${DeleteItemFunction}
+      RetentionInDays: 30
+
+  GetAllItemsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/get-all-items.getAllItemsHandler
+      CodeUri: './dist'
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: emails-accounts-api get all items
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SampleTable
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SampleTable
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /accounts
+            Method: get
+            Auth:
+              ApiKeyRequired: true
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
+
+  GetAllItemsLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: GetAllItemsFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetAllItemsFunction}
+      RetentionInDays: 30
+
+  GetByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/get-by-id.getByIdHandler
+      CodeUri: './dist'
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: emails-accounts-api get by ID
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SampleTable
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SampleTable
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /accounts/{accountsId}
+            Method: get
+            Auth:
+              ApiKeyRequired: true
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
+
+  GetByIdLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: GetByIdFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${GetByIdFunction}
+      RetentionInDays: 30
+
+  PatchItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/patch-item.patchItemHandler
+      CodeUri: './dist'
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: emails-accounts-api patch item
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SampleTable
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SampleTable
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /accounts/{accountsId}
+            Method: patch
+            Auth:
+              ApiKeyRequired: true
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
+
+  PatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: PatchItemFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PatchItemFunction}
+      RetentionInDays: 30
+
+  PutItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handlers/put-item.putItemHandler
+      CodeUri: './dist'
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Description: emails-accounts-api put item
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SampleTable
+      Environment:
+        Variables:
+          DYNAMODB_TABLE_NAME: !Ref SampleTable
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /accounts/{accountsId}
+            Method: put
+            Auth:
+              ApiKeyRequired: true
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
+
+  PutLogGroup:
+    Type: AWS::Logs::LogGroup
+    DependsOn: PutItemFunction
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${PutItemFunction}
+      RetentionInDays: 30
+
+  SampleTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: Account
+        Type: String
+      Tags:
+        'created-by': 'emails-accounts-api'
+        'created-for': 'emails'
