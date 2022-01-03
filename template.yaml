@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  emails-accounts-api
+  emails-account-api
 
 Transform:
   - AWS::Serverless-2016-10-31
@@ -8,10 +8,10 @@ Transform:
 Parameters:
   Subdomain:
     Type: String
-    Default: emails-accounts-api
+    Default: emails-account-api
     AllowedValues:
-      - emails-accounts-api
-      - emails-accounts-api-test
+      - emails-account-api
+      - emails-account-api-test
     Description: Subdomain to use for API
 
 Resources:
@@ -23,7 +23,7 @@ Resources:
         ApiKeyRequired: true # sets for all methods
         UsagePlan:
           CreateUsagePlan: PER_API
-          Description: Usage plan for emails-accounts-api
+          Description: Usage plan for emails-account-api
       Domain:
         DomainName: !Sub ${Subdomain}.bowland.link
         CertificateArn: arn:aws:acm:us-east-1:494887012091:certificate/7f4606f7-302c-40a8-ac9d-e63db9b7a712
@@ -43,7 +43,7 @@ Resources:
         - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: emails-accounts-api delete by ID
+      Description: emails-account-api delete by ID
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
@@ -61,7 +61,7 @@ Resources:
             Auth:
               ApiKeyRequired: true
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'
 
   DeleteItemLogGroup:
@@ -81,7 +81,7 @@ Resources:
         - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: emails-accounts-api get all items
+      Description: emails-account-api get all items
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
@@ -99,7 +99,7 @@ Resources:
             Auth:
               ApiKeyRequired: true
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'
 
   GetAllItemsLogGroup:
@@ -119,7 +119,7 @@ Resources:
         - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: emails-accounts-api get by ID
+      Description: emails-account-api get by ID
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
@@ -137,7 +137,7 @@ Resources:
             Auth:
               ApiKeyRequired: true
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'
 
   GetByIdLogGroup:
@@ -157,7 +157,7 @@ Resources:
         - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: emails-accounts-api patch item
+      Description: emails-account-api patch item
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
@@ -175,7 +175,7 @@ Resources:
             Auth:
               ApiKeyRequired: true
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'
 
   PatchLogGroup:
@@ -195,7 +195,7 @@ Resources:
         - x86_64
       MemorySize: 128
       Timeout: 100
-      Description: emails-accounts-api put item
+      Description: emails-account-api put item
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
@@ -213,7 +213,7 @@ Resources:
             Auth:
               ApiKeyRequired: true
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'
 
   PutLogGroup:
@@ -231,5 +231,5 @@ Resources:
         Type: String
       TableName: !Sub ${Subdomain}-table
       Tags:
-        'created-by': 'emails-accounts-api'
+        'created-by': 'emails-account-api'
         'created-for': 'emails'

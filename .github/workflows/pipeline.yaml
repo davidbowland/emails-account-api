@@ -13,7 +13,7 @@ env:
   PIPELINE_USER_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
-  TESTING_STACK_NAME: emails-accounts-api-test
+  TESTING_STACK_NAME: emails-account-api-test
   TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-dev-pipe-PipelineExecutionRole-DRD9O21EQL33
   TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-1VAGXTZ6YPX38
   TESTING_ARTIFACTS_BUCKET: emails-lambda-source
@@ -22,7 +22,7 @@ env:
   # testing "sam package" and "sam deploy" commands.
   # TESTING_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
   TESTING_REGION: ${{ secrets.AWS_REGION }}
-  PROD_STACK_NAME: emails-accounts-api
+  PROD_STACK_NAME: emails-account-api
   PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-prod-pip-PipelineExecutionRole-MJL5WDWSUADJ
   PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-prod-CloudFormationExecutionR-175EQOZKAQ42Z
   PROD_ARTIFACTS_BUCKET: emails-lambda-source
@@ -125,7 +125,7 @@ jobs:
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides Subdomain=emails-accounts-api-test
+            --parameter-overrides Subdomain=emails-account-api-test
 
   build-and-package:
     name: Build and package lambda

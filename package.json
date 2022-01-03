@@ -1,5 +1,5 @@
 {
-  "name": "emails-accounts-api",
+  "name": "emails-account-api",
   "author": "David Bowland",
   "description": "Handles emails accounts",
   "version": "1.2.0",
