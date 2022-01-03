@@ -5,11 +5,11 @@ import { getIdFromEvent } from '../utils/events'
 import { log, logErrorWithDefault } from '../utils/logging'
 import status from '../utils/status'
 
-type FetchErrorHandler = (accountId: string) => Promise<APIGatewayProxyResult>
+type FetchErrorHandler = () => Promise<APIGatewayProxyResult>
 
 const errorNotFound: FetchErrorHandler = (): Promise<APIGatewayProxyResult> => Promise.resolve(status.NOT_FOUND)
 
-const fetchDefault: FetchErrorHandler = () => fetchById(defaultDynamodbKey, errorNotFound)
+const fetchDefault: FetchErrorHandler = (): Promise<APIGatewayProxyResult> => fetchById(defaultDynamodbKey, errorNotFound)
 
 const fetchById = (accountId: string, onError: FetchErrorHandler): Promise<APIGatewayProxyResult> =>
   getDataByKey(accountId)
