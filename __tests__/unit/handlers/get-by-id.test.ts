@@ -35,16 +35,26 @@ describe('get-by-id', () => {
       expect(result).toEqual({ ...status.BAD_REQUEST, body: '{}' })
     })
 
-    test('expect INTERNAL_SERVER_ERROR when getDataByKey rejects', async () => {
+    test('expect default value when getDataByKey rejects once', async () => {
       mocked(dynamodb).getDataByKey.mockRejectedValueOnce(undefined)
       const result = await getByIdHandler(event)
-      expect(result).toEqual(status.INTERNAL_SERVER_ERROR)
+      expect(result).toEqual({
+        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true},"accountId":"default"}',
+        statusCode: 200,
+      })
+    })
+
+    test('expect NOT_FOUND when getDataByKey rejects', async () => {
+      mocked(dynamodb).getDataByKey.mockRejectedValueOnce(undefined)
+      mocked(dynamodb).getDataByKey.mockRejectedValueOnce(undefined)
+      const result = await getByIdHandler(event)
+      expect(result).toEqual(status.NOT_FOUND)
     })
 
     test('expect preferences returned', async () => {
       const result = await getByIdHandler(event)
       expect(result).toEqual({
-        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true}}',
+        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true},"accountId":"accountId"}',
         statusCode: 200,
       })
     })
