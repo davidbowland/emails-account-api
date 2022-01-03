@@ -1,4 +1,7 @@
 {
-  "httpMethod": "POST",
-  "body": "[{\"op\":\"replace\",\"path\":\"/inbound\",\"value\":{\"save\":true}}]"
+  "httpMethod": "PATCH",
+  "body": "[{\"op\":\"replace\",\"path\":\"/inbound\",\"value\":{\"save\":true}}]",
+  "pathParameters": {
+    "accountId": "accountId"
+  }
 }

@@ -19,9 +19,3 @@ export interface AccountPreference {
 export interface Accounts {
   [key: string]: AccountPreference
 }
-
-// export interface PatchOperation {
-//   op: string
-//   path: string
-//   value?: string
-// }
