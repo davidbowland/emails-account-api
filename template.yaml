@@ -47,16 +47,16 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref AccountsTable
       Environment:
         Variables:
-          DYNAMODB_TABLE_NAME: !Ref SampleTable
+          DYNAMODB_TABLE_NAME: !Ref AccountsTable
       Events:
         ApiKey:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /accounts/{accountsId}
+            Path: /accounts/{accountId}
             Method: delete
             Auth:
               ApiKeyRequired: true
@@ -85,10 +85,10 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref AccountsTable
       Environment:
         Variables:
-          DYNAMODB_TABLE_NAME: !Ref SampleTable
+          DYNAMODB_TABLE_NAME: !Ref AccountsTable
       Events:
         ApiKey:
           Type: Api
@@ -123,16 +123,16 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref AccountsTable
       Environment:
         Variables:
-          DYNAMODB_TABLE_NAME: !Ref SampleTable
+          DYNAMODB_TABLE_NAME: !Ref AccountsTable
       Events:
         ApiKey:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /accounts/{accountsId}
+            Path: /accounts/{accountId}
             Method: get
             Auth:
               ApiKeyRequired: true
@@ -161,16 +161,16 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref AccountsTable
       Environment:
         Variables:
-          DYNAMODB_TABLE_NAME: !Ref SampleTable
+          DYNAMODB_TABLE_NAME: !Ref AccountsTable
       Events:
         ApiKey:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /accounts/{accountsId}
+            Path: /accounts/{accountId}
             Method: patch
             Auth:
               ApiKeyRequired: true
@@ -199,16 +199,16 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - DynamoDBCrudPolicy:
-            TableName: !Ref SampleTable
+            TableName: !Ref AccountsTable
       Environment:
         Variables:
-          DYNAMODB_TABLE_NAME: !Ref SampleTable
+          DYNAMODB_TABLE_NAME: !Ref AccountsTable
       Events:
         ApiKey:
           Type: Api
           Properties:
             RestApiId: !Ref Api
-            Path: /accounts/{accountsId}
+            Path: /accounts/{accountId}
             Method: put
             Auth:
               ApiKeyRequired: true
@@ -223,12 +223,13 @@ Resources:
       LogGroupName: !Sub /aws/lambda/${PutItemFunction}
       RetentionInDays: 30
 
-  SampleTable:
+  AccountsTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
       PrimaryKey:
         Name: Account
         Type: String
+      TableName: !Sub ${Subdomain}-table
       Tags:
         'created-by': 'emails-accounts-api'
         'created-for': 'emails'
