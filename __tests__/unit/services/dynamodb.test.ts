@@ -24,7 +24,7 @@ describe('dynamodb', () => {
             S: key,
           },
         },
-        TableName: 'email-bucket',
+        TableName: 'account-table',
       })
     })
   })
@@ -42,7 +42,7 @@ describe('dynamodb', () => {
             S: key,
           },
         },
-        TableName: 'email-bucket',
+        TableName: 'account-table',
       })
     })
 
@@ -83,7 +83,7 @@ describe('dynamodb', () => {
             S: JSON.stringify(preferences),
           },
         },
-        TableName: 'email-bucket',
+        TableName: 'account-table',
       })
     })
   })

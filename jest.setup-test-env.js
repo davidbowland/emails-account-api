@@ -1,6 +1,6 @@
 // DynamoDB
 
-process.env.DYNAMODB_TABLE_NAME = 'email-bucket'
+process.env.DYNAMODB_TABLE_NAME = 'account-table'
 
 // Console
 
