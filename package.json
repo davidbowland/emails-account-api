@@ -6,6 +6,33 @@
   "engines": {
     "node": "^14.0.0"
   },
+  "scripts": {
+    "build": "npm run clean && tsc && cp package*.json dist/ && cd dist/ && HUSKY=0 NODE_ENV=production npm ci",
+    "clean": "rm -rf dist coverage && NODE_ENV=test npm ci",
+    "lint": "prettier --write . && eslint --fix . --resolve-plugins-relative-to .",
+    "prepare": "if [ \"$HUSKY\" != \"0\" ]; then husky install ; fi",
+    "start": "npm run build && npm run quick-start",
+    "quick-start": "tsc && HUSKY=0 sam build && EMAIL_BUCKET=emails-dbowland SQS_MESSAGE_QUEUE_ID=emails SQS_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/494887012091/emails-queue-service-SimpleQueue-1S70UGPUYHOUI.fifo sam local invoke --event events/post-item.json",
+    "test": "npm run lint && jest --colors"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "prettier --write --ignore-unknown",
+      "eslint --resolve-plugins-relative-to . --fix",
+      "jest --colors --findRelatedTests --coverageThreshold '{}'"
+    ],
+    "**/*": [
+      "prettier --write --ignore-unknown"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidbowland/emails-account-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davidbowland/emails-account-api/issues"
+  },
+  "homepage": "https://github.com/davidbowland/emails-account-api#readme",
   "dependencies": {
     "aws-sdk": "^2.799.0",
     "fast-json-patch": "^3.1.0",
@@ -30,24 +57,5 @@
     "prettier": "^2.5.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
-  },
-  "scripts": {
-    "build": "npm run clean && tsc && cp package*.json dist/ && cd dist/ && HUSKY=0 NODE_ENV=production npm ci",
-    "clean": "rm -rf dist coverage && NODE_ENV=test npm ci",
-    "lint": "prettier --write . && eslint --fix . --resolve-plugins-relative-to .",
-    "prepare": "if [ \"$HUSKY\" != \"0\" ]; then husky install ; fi",
-    "start": "npm run build && npm run quick-start",
-    "quick-start": "tsc && HUSKY=0 sam build && EMAIL_BUCKET=emails-dbowland SQS_MESSAGE_QUEUE_ID=emails SQS_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/494887012091/emails-queue-service-SimpleQueue-1S70UGPUYHOUI.fifo sam local invoke --event events/post-item.json",
-    "test": "npm run lint && jest --colors"
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "prettier --write --ignore-unknown",
-      "eslint --resolve-plugins-relative-to . --fix",
-      "jest --colors --findRelatedTests --coverageThreshold '{}'"
-    ],
-    "**/*": [
-      "prettier --write --ignore-unknown"
-    ]
   }
 }

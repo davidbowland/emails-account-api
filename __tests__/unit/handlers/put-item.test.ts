@@ -17,6 +17,7 @@ describe('put-item', () => {
   const event = eventJson as unknown as APIGatewayEvent
 
   beforeAll(() => {
+    mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
     mocked(dynamodb).setDataByKey.mockResolvedValue(undefined)
     mocked(events).extractAccountPreferenceFromEvent.mockResolvedValue(preferences)
     mocked(events).getIdFromEvent.mockResolvedValue(key)
@@ -42,9 +43,21 @@ describe('put-item', () => {
       expect(result).toEqual(status.INTERNAL_SERVER_ERROR)
     })
 
-    test('expect NO_CONTENT on success', async () => {
+    test('expect OK on success when item already exists', async () => {
       const result = await putItemHandler(event)
-      expect(result).toEqual(status.NO_CONTENT)
+      expect(result).toEqual({
+        ...status.OK,
+        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true}}',
+      })
+    })
+
+    test('expect CREATED on success when item is new', async () => {
+      mocked(dynamodb).getDataByKey.mockRejectedValueOnce(undefined)
+      const result = await putItemHandler(event)
+      expect(result).toEqual({
+        ...status.CREATED,
+        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true}}',
+      })
     })
   })
 })
