@@ -42,7 +42,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 100
+      Timeout: 30
       Description: emails-account-api delete by ID
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -80,7 +80,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 100
+      Timeout: 30
       Description: emails-account-api get all items
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -118,7 +118,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 100
+      Timeout: 30
       Description: emails-account-api get by ID
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -156,7 +156,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 100
+      Timeout: 30
       Description: emails-account-api patch item
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -194,7 +194,7 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 100
+      Timeout: 30
       Description: emails-account-api put item
       Policies:
         - AWSLambdaBasicExecutionRole
