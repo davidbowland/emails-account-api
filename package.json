@@ -12,7 +12,7 @@
     "lint": "prettier --write . && eslint --fix . --resolve-plugins-relative-to .",
     "prepare": "if [ \"$HUSKY\" != \"0\" ]; then husky install ; fi",
     "start": "npm run build && npm run quick-start",
-    "quick-start": "tsc && HUSKY=0 sam build && EMAIL_BUCKET=emails-dbowland SQS_MESSAGE_QUEUE_ID=emails SQS_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/494887012091/emails-queue-service-SimpleQueue-1S70UGPUYHOUI.fifo sam local invoke --event events/post-item.json",
+    "quick-start": "tsc && HUSKY=0 sam build && EMAIL_BUCKET=emails-dbowland SQS_MESSAGE_QUEUE_ID=emails SQS_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/$AWS_ACCOUNT_ID/emails-queue-service-SimpleQueue-1S70UGPUYHOUI.fifo sam local invoke --event events/post-item.json",
     "test": "npm run lint && jest --colors"
   },
   "lint-staged": {
