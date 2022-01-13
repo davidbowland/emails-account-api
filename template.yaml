@@ -6,13 +6,23 @@ Transform:
   - AWS::Serverless-2016-10-31
 
 Parameters:
-  Subdomain:
+  AccountId:
     Type: String
-    Default: emails-account-api
+    Description: AWS account ID
+  Environment:
+    Type: String
+    Default: prod
     AllowedValues:
-      - emails-account-api
-      - emails-account-api-test
-    Description: Subdomain to use for API
+      - prod
+      - test
+    Description: Environment for deploy
+
+Mappings:
+  EnvironmentMap:
+    prod:
+      domain: emails-account-api.bowland.link
+    test:
+      domain: emails-account-api-test.bowland.link
 
 Resources:
   Api:
@@ -25,8 +35,8 @@ Resources:
           CreateUsagePlan: PER_API
           Description: Usage plan for emails-account-api
       Domain:
-        DomainName: !Sub ${Subdomain}.bowland.link
-        CertificateArn: arn:aws:acm:us-east-1:494887012091:certificate/7f4606f7-302c-40a8-ac9d-e63db9b7a712
+        DomainName: !FindInMap [EnvironmentMap, !Ref Environment, domain]
+        CertificateArn: !Sub 'arn:aws:acm:us-east-1:${AccountId}:certificate/7f4606f7-302c-40a8-ac9d-e63db9b7a712'
         EndpointConfiguration: EDGE
         Route53:
           HostedZoneId: Z01312547RGU1BYKIJXY
@@ -229,7 +239,7 @@ Resources:
       PrimaryKey:
         Name: Account
         Type: String
-      TableName: !Sub ${Subdomain}-table
+      TableName: !FindInMap [EnvironmentMap, !Ref Environment, domain]
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
