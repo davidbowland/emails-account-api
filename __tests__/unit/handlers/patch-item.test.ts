@@ -4,9 +4,8 @@ import { key, jsonPatchOperations, preferences } from '../__mocks__'
 import { patchItemHandler } from '@handlers/patch-item'
 import eventJson from '@events/patch-item.json'
 import * as dynamodb from '@services/dynamodb'
-import { APIGatewayEvent } from '@types'
+import { APIGatewayEvent, PatchOperation } from '@types'
 import * as events from '@utils/events'
-import * as logging from '@utils/logging'
 import status from '@utils/status'
 
 jest.mock('@services/dynamodb')
@@ -22,37 +21,38 @@ describe('patch-item', () => {
     mocked(dynamodb).setDataByKey.mockResolvedValue(undefined)
     mocked(events).extractJsonPatchFromEvent.mockResolvedValue(jsonPatchOperations)
     mocked(events).getIdFromEvent.mockResolvedValue(key)
-    mocked(logging).log.mockResolvedValue(undefined)
-    mocked(logging).logErrorWithDefault.mockImplementation((value) => async () => value)
   })
 
   describe('patchItemHandler', () => {
-    test('expect accountId passed to setDataByKey', async () => {
-      await patchItemHandler(event)
-      expect(mocked(dynamodb).setDataByKey).toHaveBeenCalledWith(key, expectedResult)
-    })
-
-    test('expect BAD_REQUEST when getIdFromEvent rejects', async () => {
-      mocked(events).getIdFromEvent.mockRejectedValueOnce(undefined)
+    test('expect BAD_REQUEST when invalid index', async () => {
+      mocked(events).getIdFromEvent.mockRejectedValueOnce('Bad request')
       const result = await patchItemHandler(event)
-      expect(result).toEqual({ ...status.BAD_REQUEST, body: '{}' })
+      expect(result).toEqual(expect.objectContaining(status.BAD_REQUEST))
     })
 
-    test('expect INTERNAL_SERVER_ERROR when getDataByKey rejects', async () => {
-      mocked(dynamodb).getDataByKey.mockRejectedValueOnce(undefined)
+    test('expect BAD_REQUEST when unable to parse body', async () => {
+      mocked(events).extractJsonPatchFromEvent.mockRejectedValueOnce('Bad request')
       const result = await patchItemHandler(event)
-      expect(result).toEqual(status.INTERNAL_SERVER_ERROR)
+      expect(result).toEqual(expect.objectContaining(status.BAD_REQUEST))
     })
 
-    test('expect INTERNAL_SERVER_ERROR when setDataByKey rejects', async () => {
+    test('expect BAD_REQUEST when patch operations are invalid', async () => {
+      mocked(events).extractJsonPatchFromEvent.mockResolvedValueOnce([
+        { op: 'replace', path: '/fnord' },
+      ] as unknown[] as PatchOperation[])
+      const result = await patchItemHandler(event)
+      expect(result.statusCode).toEqual(status.BAD_REQUEST.statusCode)
+    })
+
+    test('expect INTERNAL_SERVER_ERROR on setDataByIndex reject', async () => {
       mocked(dynamodb).setDataByKey.mockRejectedValueOnce(undefined)
       const result = await patchItemHandler(event)
-      expect(result).toEqual(status.INTERNAL_SERVER_ERROR)
+      expect(result).toEqual(expect.objectContaining(status.INTERNAL_SERVER_ERROR))
     })
 
-    test('expect NO_CONTENT on success', async () => {
+    test('expect OK and body', async () => {
       const result = await patchItemHandler(event)
-      expect(result).toEqual({ ...status.OK, body: JSON.stringify(expectedResult) })
+      expect(result).toEqual(expect.objectContaining({ ...status.OK, body: JSON.stringify(expectedResult) }))
     })
   })
 })

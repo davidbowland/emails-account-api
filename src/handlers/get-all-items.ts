@@ -1,9 +1,15 @@
 import { scanData } from '../services/dynamodb'
 import status from '../utils/status'
 import { APIGatewayEvent, APIGatewayProxyResult } from '../types'
-import { log, logErrorWithDefault } from '../utils/logging'
+import { log, logError } from '../utils/logging'
 
-export const getAllItemsHandler = (event: APIGatewayEvent): Promise<APIGatewayProxyResult> =>
+export const getAllItemsHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', event)
-    .then(() => scanData().then((data) => ({ ...status.OK, body: JSON.stringify(data) })))
-    .catch(logErrorWithDefault(status.INTERNAL_SERVER_ERROR))
+  try {
+    const data = await scanData()
+    return { ...status.OK, body: JSON.stringify(data) }
+  } catch (error) {
+    logError(error)
+    return status.INTERNAL_SERVER_ERROR
+  }
+}

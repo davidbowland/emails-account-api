@@ -6,7 +6,6 @@ import eventJson from '@events/put-item.json'
 import * as dynamodb from '@services/dynamodb'
 import { APIGatewayEvent } from '@types'
 import * as events from '@utils/events'
-import * as logging from '@utils/logging'
 import status from '@utils/status'
 
 jest.mock('@services/dynamodb')
@@ -21,8 +20,6 @@ describe('put-item', () => {
     mocked(dynamodb).setDataByKey.mockResolvedValue(undefined)
     mocked(events).extractAccountPreferenceFromEvent.mockResolvedValue(preferences)
     mocked(events).getIdFromEvent.mockResolvedValue(key)
-    mocked(logging).log.mockResolvedValue(undefined)
-    mocked(logging).logErrorWithDefault.mockImplementation((value) => async () => value)
   })
 
   describe('putItemHandler', () => {

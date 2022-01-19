@@ -6,7 +6,6 @@ import eventJson from '@events/delete-item.json'
 import * as dynamodb from '@services/dynamodb'
 import { APIGatewayEvent } from '@types'
 import * as events from '@utils/events'
-import * as logging from '@utils/logging'
 import status from '@utils/status'
 
 jest.mock('@services/dynamodb')
@@ -20,8 +19,6 @@ describe('delete-item', () => {
     mocked(dynamodb).deleteDataByKey.mockResolvedValue(undefined)
     mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
     mocked(events).getIdFromEvent.mockResolvedValue(key)
-    mocked(logging).log.mockResolvedValue(undefined)
-    mocked(logging).logErrorWithDefault.mockImplementation((value) => async () => value)
   })
 
   describe('deleteByIdHandler', () => {

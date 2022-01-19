@@ -1,19 +1,34 @@
 import { deleteDataByKey, getDataByKey } from '../services/dynamodb'
 import { APIGatewayEvent, APIGatewayProxyResult } from '../types'
 import { getIdFromEvent } from '../utils/events'
-import { log, logErrorWithDefault } from '../utils/logging'
+import { log, logError } from '../utils/logging'
 import status from '../utils/status'
 
-const fetchDataThenDelete = (accountId: string): Promise<APIGatewayProxyResult> =>
-  getDataByKey(accountId)
-    .then((data) =>
-      deleteDataByKey(accountId)
-        .then(() => ({ ...status.OK, body: JSON.stringify(data) }))
-        .catch(logErrorWithDefault(status.INTERNAL_SERVER_ERROR))
-    )
-    .catch(logErrorWithDefault(status.NO_CONTENT))
+const deleteData = async (accountId: string, data: any): Promise<APIGatewayProxyResult> => {
+  try {
+    await deleteDataByKey(accountId)
+    return { ...status.OK, body: JSON.stringify(data) }
+  } catch (error) {
+    logError(error)
+    return status.INTERNAL_SERVER_ERROR
+  }
+}
 
-export const deleteByIdHandler = (event: APIGatewayEvent): Promise<APIGatewayProxyResult> =>
+const fetchDataThenDelete = async (accountId: string): Promise<APIGatewayProxyResult> => {
+  try {
+    const data = await getDataByKey(accountId)
+    return deleteData(accountId, data)
+  } catch {
+    return status.NO_CONTENT
+  }
+}
+
+export const deleteByIdHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', { ...event, body: undefined })
-    .then(() => getIdFromEvent(event).then(fetchDataThenDelete))
-    .catch((err) => ({ ...status.BAD_REQUEST, body: JSON.stringify({ message: err }) }))
+  try {
+    const accountId = await getIdFromEvent(event)
+    return await fetchDataThenDelete(accountId)
+  } catch (error) {
+    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error }) }
+  }
+}
