@@ -20,11 +20,15 @@ Parameters:
 Mappings:
   EnvironmentMap:
     prod:
-      domain: emails-account-api.bowland.link
+      certificate: adce1a21-90b4-4120-8548-111215e582f0
+      domain: emails-account-api.dbowland.com
       table: emails-account-api
+      zoneId: Z072422417XWM8PIXXSFA
     test:
+      certificate: 6a48cba7-feb9-4de5-8cbf-d383140fcdef
       domain: emails-account-api-test.bowland.link
       table: emails-account-api-test
+      zoneId: Z01312547RGU1BYKIJXY
 
 Resources:
   Api:
@@ -38,10 +42,12 @@ Resources:
           Description: Usage plan for emails-account-api
       Domain:
         DomainName: !FindInMap [EnvironmentMap, !Ref Environment, domain]
-        CertificateArn: !Sub 'arn:aws:acm:us-east-1:${AccountId}:certificate/7f4606f7-302c-40a8-ac9d-e63db9b7a712'
+        CertificateArn: !Sub
+          - 'arn:aws:acm:us-east-1:${AccountId}:certificate/${Certificate}'
+          - Certificate: !FindInMap [EnvironmentMap, !Ref Environment, certificate]
         EndpointConfiguration: EDGE
         Route53:
-          HostedZoneId: Z01312547RGU1BYKIJXY
+          HostedZoneId: !FindInMap [EnvironmentMap, !Ref Environment, zoneId]
         BasePath:
           - /v1
 
