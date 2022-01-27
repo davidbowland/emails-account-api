@@ -57,8 +57,21 @@ describe('events', () => {
       expect(result).toEqual(key)
     })
 
+    test('expect case-insensitive ID from event', async () => {
+      const result = await getIdFromEvent({
+        ...getEventJson,
+        pathParameters: { accountId: getEventJson.pathParameters.accountId.toUpperCase() },
+      } as unknown as APIGatewayEvent)
+      expect(result).toEqual(key)
+    })
+
     test('expect reject on invalid ID', async () => {
       const tempEvent = {} as unknown as APIGatewayEvent
+      await expect(getIdFromEvent(tempEvent)).rejects.toBeDefined()
+    })
+
+    test('expect reject when pathParameter missing', async () => {
+      const tempEvent = { pathParameters: {} } as unknown as APIGatewayEvent
       await expect(getIdFromEvent(tempEvent)).rejects.toBeDefined()
     })
   })
