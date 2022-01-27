@@ -2,7 +2,7 @@
   "name": "emails-account-api",
   "author": "David Bowland",
   "description": "Handles emails accounts",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "engines": {
     "node": "^14.0.0"
   },
