@@ -30,7 +30,7 @@ describe('get-all-items', () => {
     test('expect preferences returned', async () => {
       const result = await getAllItemsHandler(event)
       expect(result).toEqual({
-        body: '{"accountId":{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true}}}',
+        body: '{"accountid":{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true}}}',
         statusCode: 200,
       })
     })

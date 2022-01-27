@@ -51,7 +51,7 @@ describe('get-by-id', () => {
     test('expect preferences returned', async () => {
       const result = await getByIdHandler(event)
       expect(result).toEqual({
-        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true},"accountId":"accountId"}',
+        body: '{"inbound":{"forwardTargets":["some@email.address"],"save":true},"outbound":{"ccTargets":["another@email.address"],"save":true},"accountId":"accountid"}',
         statusCode: 200,
       })
     })

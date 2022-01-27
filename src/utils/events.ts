@@ -38,4 +38,4 @@ export const extractJsonPatchFromEvent = (event: APIGatewayEvent): Promise<Patch
   parseEventBody(event) as Promise<PatchOperation[]>
 
 export const getIdFromEvent = (event: APIGatewayEvent): Promise<string> =>
-  Promise.resolve(event.pathParameters?.accountId ?? Promise.reject('Invalid account ID'))
+  Promise.resolve(event.pathParameters?.accountId?.toLowerCase() ?? Promise.reject('Invalid account ID'))

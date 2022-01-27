@@ -11,6 +11,6 @@ export const preferences: AccountPreference = {
   },
 }
 
-export const key = 'accountId'
+export const key = 'accountid'
 
 export const jsonPatchOperations: PatchOperation[] = [{ op: 'replace', path: '/inbound', value: { save: true } }]
