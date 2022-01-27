@@ -26,7 +26,7 @@ Mappings:
       zoneId: Z072422417XWM8PIXXSFA
     test:
       certificate: 6a48cba7-feb9-4de5-8cbf-d383140fcdef
-      domain: emails-account-api-test.bowland.link
+      domain: emails-account-api.bowland.link
       table: emails-account-api-test
       zoneId: Z01312547RGU1BYKIJXY
 
