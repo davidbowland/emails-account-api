@@ -14,13 +14,14 @@ sam build --template ${SAM_TEMPLATE} --use-container
 
 # Deploy build lambda
 
-TESTING_ARTIFACTS_BUCKET=emails-lambda-source
-TESTING_CLOUDFORMATION_EXECUTION_ROLE="arn:aws:iam::$AWS_ACCOUNT_ID:role/aws-sam-cli-managed-dev-p-CloudFormationExecutionR-1VAGXTZ6YPX38"
+TESTING_ARTIFACTS_BUCKET=emails-lambda-test
+TESTING_CLOUDFORMATION_EXECUTION_ROLE="arn:aws:iam::$AWS_ACCOUNT_ID:role/emails-cloudformation-test"
 TESTING_STACK_NAME=emails-account-api-test
 sam deploy --stack-name ${TESTING_STACK_NAME} \
            --capabilities CAPABILITY_IAM \
            --region us-east-1 \
            --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+           --s3-prefix emails-account-api-test \
            --no-fail-on-empty-changeset \
            --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-           --parameter-overrides "AccountId=$AWS_ACCOUNT_ID Environment=test"
+           --parameter-overrides "Environment=test"

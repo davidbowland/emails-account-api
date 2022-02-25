@@ -11,14 +11,14 @@ env:
   PIPELINE_USER_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   SAM_TEMPLATE: template.yaml
   TESTING_STACK_NAME: emails-account-api-test
-  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-emails-a-PipelineExecutionRole-RZV44C09I1RS
-  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-email-CloudFormationExecutionR-1X9LRYU75289I
-  TESTING_ARTIFACTS_BUCKET: aws-sam-cli-managed-emails-accoun-artifactsbucket-7xn16id34wkz
+  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/emails-pipeline-test
+  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/emails-cloudformation-test
+  TESTING_ARTIFACTS_BUCKET: emails-lambda-test
   TESTING_REGION: ${{ secrets.AWS_REGION }}
   PROD_STACK_NAME: emails-account-api
-  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-emails-a-PipelineExecutionRole-B1T2R0JGNJ7E
-  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/aws-sam-cli-managed-email-CloudFormationExecutionR-1NKVS0CAC0JZB
-  PROD_ARTIFACTS_BUCKET: aws-sam-cli-managed-emails-accoun-artifactsbucket-kag9vgqsz97c
+  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/emails-pipeline
+  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/emails-cloudformation
+  PROD_ARTIFACTS_BUCKET: emails-lambda
   PROD_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
@@ -82,9 +82,10 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --s3-prefix emails-account-api-test \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides 'AccountId=${{ secrets.AWS_ACCOUNT_ID }} Environment=test'
+            --parameter-overrides 'Environment=test'
 
   build-and-package:
     name: Build and package lambda
@@ -125,6 +126,7 @@ jobs:
         run: |
           sam package \
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --s3-prefix emails-account-api-test \
             --region ${TESTING_REGION} \
             --output-template-file packaged-testing.yaml
 
@@ -148,6 +150,7 @@ jobs:
         run: |
           sam package \
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+            --s3-prefix emails-account-api \
             --region ${PROD_REGION} \
             --output-template-file packaged-prod.yaml
 
@@ -188,9 +191,10 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${TESTING_REGION} \
             --s3-bucket ${TESTING_ARTIFACTS_BUCKET} \
+            --s3-prefix emails-account-api-test \
             --no-fail-on-empty-changeset \
             --role-arn ${TESTING_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides 'AccountId=${{ secrets.AWS_ACCOUNT_ID }} Environment=test'
+            --parameter-overrides 'Environment=test'
 
   deploy-prod:
     name: Deploy to production
@@ -224,9 +228,9 @@ jobs:
             --capabilities CAPABILITY_IAM \
             --region ${PROD_REGION} \
             --s3-bucket ${PROD_ARTIFACTS_BUCKET} \
+            --s3-prefix emails-account-api \
             --no-fail-on-empty-changeset \
-            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE} \
-            --parameter-overrides 'AccountId=${{ secrets.AWS_ACCOUNT_ID }}'
+            --role-arn ${PROD_CLOUDFORMATION_EXECUTION_ROLE}
 
   bump:
     name: Bump the version number and tag the commit
