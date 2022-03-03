@@ -18,7 +18,7 @@ describe('delete-item', () => {
   beforeAll(() => {
     mocked(dynamodb).deleteDataByKey.mockResolvedValue(undefined)
     mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
-    mocked(events).getIdFromEvent.mockResolvedValue(key)
+    mocked(events).getIdFromEvent.mockReturnValue(key)
   })
 
   describe('deleteByIdHandler', () => {
@@ -29,9 +29,11 @@ describe('delete-item', () => {
     })
 
     test('expect BAD_REQUEST when getIdFromEvent rejects', async () => {
-      mocked(events).getIdFromEvent.mockRejectedValueOnce(undefined)
+      mocked(events).getIdFromEvent.mockImplementationOnce(() => {
+        throw new Error('Bad request')
+      })
       const result = await deleteByIdHandler(event)
-      expect(result).toEqual({ ...status.BAD_REQUEST, body: '{}' })
+      expect(result).toEqual(status.BAD_REQUEST)
     })
 
     test('expect NO_CONTENT when getDataByKey rejects', async () => {

@@ -24,9 +24,9 @@ const fetchById = async (accountId: string, onError: FetchErrorHandler): Promise
 export const getByIdHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', { ...event, body: undefined })
   try {
-    const accountId = await getIdFromEvent(event)
+    const accountId = getIdFromEvent(event)
     return fetchById(accountId, fetchDefault)
   } catch (error) {
-    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error }) }
+    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error.message }) }
   }
 }

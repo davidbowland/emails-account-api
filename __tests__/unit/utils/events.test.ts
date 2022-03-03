@@ -9,70 +9,70 @@ describe('events', () => {
   describe('extractAccountPreferenceFromEvent', () => {
     const event = putEventJson as unknown as APIGatewayEvent
 
-    test('expect preference from event', async () => {
-      const result = await extractAccountPreferenceFromEvent(event)
+    test('expect preference from event', () => {
+      const result = extractAccountPreferenceFromEvent(event)
       expect(result).toEqual(preferences)
     })
 
-    test('expect preference from event in base64', async () => {
+    test('expect preference from event in base64', () => {
       const tempEvent = {
         ...event,
         body: Buffer.from(event.body).toString('base64'),
         isBase64Encoded: true,
       } as unknown as APIGatewayEvent
-      const result = await extractAccountPreferenceFromEvent(tempEvent)
+      const result = extractAccountPreferenceFromEvent(tempEvent)
       expect(result).toEqual(preferences)
     })
 
-    test('expect preference when inbound missing', async () => {
+    test('expect preference when inbound missing', () => {
       const tempPreference = { ...preferences, inbound: undefined }
       const tempEvent = { ...event, body: JSON.stringify(tempPreference) } as unknown as APIGatewayEvent
-      const result = await extractAccountPreferenceFromEvent(tempEvent)
+      const result = extractAccountPreferenceFromEvent(tempEvent)
       expect(result).toEqual(tempPreference)
     })
 
-    test('expect preference when outbound missing', async () => {
+    test('expect preference when outbound missing', () => {
       const tempPreference = { ...preferences, outbound: undefined }
       const tempEvent = { ...event, body: JSON.stringify(tempPreference) } as unknown as APIGatewayEvent
-      const result = await extractAccountPreferenceFromEvent(tempEvent)
+      const result = extractAccountPreferenceFromEvent(tempEvent)
       expect(result).toEqual(tempPreference)
     })
 
-    test('expect reject on invalid event', async () => {
+    test('expect reject on invalid event', () => {
       const tempEvent = { ...event, body: '{}' } as unknown as APIGatewayEvent
-      await expect(extractAccountPreferenceFromEvent(tempEvent)).rejects.toBeDefined()
+      expect(() => extractAccountPreferenceFromEvent(tempEvent)).toThrow()
     })
   })
 
   describe('extractJsonPatchFromEvent', () => {
-    test('expect preference from event', async () => {
-      const result = await extractJsonPatchFromEvent(patchEventJson as unknown as APIGatewayEvent)
+    test('expect preference from event', () => {
+      const result = extractJsonPatchFromEvent(patchEventJson as unknown as APIGatewayEvent)
       expect(result).toEqual(jsonPatchOperations)
     })
   })
 
   describe('getIdFromEvent', () => {
-    test('expect ID from event', async () => {
-      const result = await getIdFromEvent(getEventJson as unknown as APIGatewayEvent)
+    test('expect ID from event', () => {
+      const result = getIdFromEvent(getEventJson as unknown as APIGatewayEvent)
       expect(result).toEqual(key)
     })
 
-    test('expect case-insensitive ID from event', async () => {
-      const result = await getIdFromEvent({
+    test('expect case-insensitive ID from event', () => {
+      const result = getIdFromEvent({
         ...getEventJson,
         pathParameters: { accountId: getEventJson.pathParameters.accountId.toUpperCase() },
       } as unknown as APIGatewayEvent)
       expect(result).toEqual(key)
     })
 
-    test('expect reject on invalid ID', async () => {
+    test('expect reject on invalid ID', () => {
       const tempEvent = {} as unknown as APIGatewayEvent
-      await expect(getIdFromEvent(tempEvent)).rejects.toBeDefined()
+      expect(() => getIdFromEvent(tempEvent)).toThrow()
     })
 
-    test('expect reject when pathParameter missing', async () => {
+    test('expect reject when pathParameter missing', () => {
       const tempEvent = { pathParameters: {} } as unknown as APIGatewayEvent
-      await expect(getIdFromEvent(tempEvent)).rejects.toBeDefined()
+      expect(() => getIdFromEvent(tempEvent)).toThrow()
     })
   })
 })

@@ -18,8 +18,8 @@ describe('put-item', () => {
   beforeAll(() => {
     mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
     mocked(dynamodb).setDataByKey.mockResolvedValue(undefined)
-    mocked(events).extractAccountPreferenceFromEvent.mockResolvedValue(preferences)
-    mocked(events).getIdFromEvent.mockResolvedValue(key)
+    mocked(events).extractAccountPreferenceFromEvent.mockReturnValue(preferences)
+    mocked(events).getIdFromEvent.mockReturnValue(key)
   })
 
   describe('putItemHandler', () => {
@@ -29,9 +29,11 @@ describe('put-item', () => {
     })
 
     test('expect BAD_REQUEST when getIdFromEvent rejects', async () => {
-      mocked(events).getIdFromEvent.mockRejectedValueOnce(undefined)
+      mocked(events).getIdFromEvent.mockImplementationOnce(() => {
+        throw new Error('Bad request')
+      })
       const result = await putItemHandler(event)
-      expect(result).toEqual({ ...status.BAD_REQUEST, body: '{}' })
+      expect(result).toEqual(status.BAD_REQUEST)
     })
 
     test('expect INTERNAL_SERVER_ERROR when setDataByKey rejects', async () => {

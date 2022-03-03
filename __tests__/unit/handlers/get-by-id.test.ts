@@ -17,7 +17,7 @@ describe('get-by-id', () => {
 
   beforeAll(() => {
     mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
-    mocked(events).getIdFromEvent.mockResolvedValue(key)
+    mocked(events).getIdFromEvent.mockReturnValue(key)
   })
 
   describe('getByIdHandler', () => {
@@ -27,9 +27,11 @@ describe('get-by-id', () => {
     })
 
     test('expect BAD_REQUEST when getIdFromEvent rejects', async () => {
-      mocked(events).getIdFromEvent.mockRejectedValueOnce(undefined)
+      mocked(events).getIdFromEvent.mockImplementationOnce(() => {
+        throw new Error('Bad request')
+      })
       const result = await getByIdHandler(event)
-      expect(result).toEqual({ ...status.BAD_REQUEST, body: '{}' })
+      expect(result).toEqual(status.BAD_REQUEST)
     })
 
     test('expect default value when getDataByKey rejects once', async () => {

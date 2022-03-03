@@ -26,9 +26,9 @@ const fetchDataThenDelete = async (accountId: string): Promise<APIGatewayProxyRe
 export const deleteByIdHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', { ...event, body: undefined })
   try {
-    const accountId = await getIdFromEvent(event)
+    const accountId = getIdFromEvent(event)
     return await fetchDataThenDelete(accountId)
   } catch (error) {
-    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error }) }
+    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error.message }) }
   }
 }

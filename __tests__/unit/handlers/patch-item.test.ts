@@ -19,25 +19,29 @@ describe('patch-item', () => {
   beforeAll(() => {
     mocked(dynamodb).getDataByKey.mockResolvedValue(preferences)
     mocked(dynamodb).setDataByKey.mockResolvedValue(undefined)
-    mocked(events).extractJsonPatchFromEvent.mockResolvedValue(jsonPatchOperations)
-    mocked(events).getIdFromEvent.mockResolvedValue(key)
+    mocked(events).extractJsonPatchFromEvent.mockReturnValue(jsonPatchOperations)
+    mocked(events).getIdFromEvent.mockReturnValue(key)
   })
 
   describe('patchItemHandler', () => {
     test('expect BAD_REQUEST when invalid index', async () => {
-      mocked(events).getIdFromEvent.mockRejectedValueOnce('Bad request')
+      mocked(events).getIdFromEvent.mockImplementationOnce(() => {
+        throw new Error('Bad request')
+      })
       const result = await patchItemHandler(event)
       expect(result).toEqual(expect.objectContaining(status.BAD_REQUEST))
     })
 
     test('expect BAD_REQUEST when unable to parse body', async () => {
-      mocked(events).extractJsonPatchFromEvent.mockRejectedValueOnce('Bad request')
+      mocked(events).extractJsonPatchFromEvent.mockImplementationOnce(() => {
+        throw new Error('Bad request')
+      })
       const result = await patchItemHandler(event)
       expect(result).toEqual(expect.objectContaining(status.BAD_REQUEST))
     })
 
     test('expect BAD_REQUEST when patch operations are invalid', async () => {
-      mocked(events).extractJsonPatchFromEvent.mockResolvedValueOnce([
+      mocked(events).extractJsonPatchFromEvent.mockReturnValueOnce([
         { op: 'replace', path: '/fnord' },
       ] as unknown[] as PatchOperation[])
       const result = await patchItemHandler(event)

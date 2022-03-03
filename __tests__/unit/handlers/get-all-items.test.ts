@@ -5,7 +5,6 @@ import { getAllItemsHandler } from '@handlers/get-all-items'
 import eventJson from '@events/get-all-items.json'
 import * as dynamodb from '@services/dynamodb'
 import { APIGatewayEvent } from '@types'
-import * as events from '@utils/events'
 import status from '@utils/status'
 
 jest.mock('@services/dynamodb')
@@ -17,7 +16,6 @@ describe('get-all-items', () => {
 
   beforeAll(() => {
     mocked(dynamodb).scanData.mockResolvedValue({ [key]: preferences })
-    mocked(events).getIdFromEvent.mockResolvedValue(key)
   })
 
   describe('getAllItemsHandler', () => {

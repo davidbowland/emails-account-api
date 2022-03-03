@@ -27,10 +27,10 @@ const patchById = async (accountId: string, patchOperations: PatchOperation[]): 
 export const patchItemHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', { ...event, body: undefined })
   try {
-    const accountId = await getIdFromEvent(event)
-    const patchOperations = await extractJsonPatchFromEvent(event)
+    const accountId = getIdFromEvent(event)
+    const patchOperations = extractJsonPatchFromEvent(event)
     return await patchById(accountId, patchOperations)
   } catch (error) {
-    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error }) }
+    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error.message }) }
   }
 }

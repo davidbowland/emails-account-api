@@ -27,10 +27,10 @@ const setPreferenceById = async (accountId: string, preference: AccountPreferenc
 export const putItemHandler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   log('Received event', { ...event, body: undefined })
   try {
-    const accountId = await getIdFromEvent(event)
-    const preference = await extractAccountPreferenceFromEvent(event)
+    const accountId = getIdFromEvent(event)
+    const preference = extractAccountPreferenceFromEvent(event)
     return await setPreferenceById(accountId, preference)
   } catch (error) {
-    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error }) }
+    return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error.message }) }
   }
 }
