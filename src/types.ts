@@ -17,5 +17,6 @@ export interface AccountPreference {
 }
 
 export interface Accounts {
-  [key: string]: AccountPreference
+  data: AccountPreference
+  id: string
 }

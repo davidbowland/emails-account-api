@@ -36,17 +36,17 @@ export const getDataByKey = (key: string): Promise<AccountPreference> =>
 
 /* Scan for items */
 
-const getItemsFromScan = (response: DynamoDB.Types.ScanOutput): Accounts | undefined =>
-  response.Items?.reduce((result, item) => ({ ...result, [item.Account.S]: JSON.parse(item.Data.S) }), {} as Accounts)
+const getItemsFromScan = (response: DynamoDB.Types.ScanOutput): Accounts[] | undefined =>
+  response.Items?.map((item) => ({ id: item.Account.S, data: JSON.parse(item.Data.S) }))
 
-export const scanData = (): Promise<Accounts> =>
+export const scanData = (): Promise<Accounts[]> =>
   dynamodb
     .scan({
       AttributesToGet: ['Data', 'Account'],
       TableName: dynamodbTableName,
     })
     .promise()
-    .then((response) => getItemsFromScan(response) ?? {})
+    .then((response) => getItemsFromScan(response) ?? [])
 
 /* Set item */
 
