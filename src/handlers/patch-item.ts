@@ -7,7 +7,11 @@ import { AccountPreference, APIGatewayEvent, APIGatewayProxyResult, PatchOperati
 import { extractJsonPatchFromEvent, getIdFromEvent } from '../utils/events'
 import { log, logError } from '../utils/logging'
 
-const applyJsonPatch = async (preference: AccountPreference, accountId: string, patchOperations: PatchOperation[]) => {
+const applyJsonPatch = async (
+  preference: AccountPreference,
+  accountId: string,
+  patchOperations: PatchOperation[]
+): Promise<APIGatewayProxyResult> => {
   const updatedPreference = applyPatch(
     preference,
     patchOperations,
