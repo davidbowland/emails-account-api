@@ -3,12 +3,11 @@ import { applyPatch } from 'fast-json-patch'
 import { mutateObjectOnJsonPatch, throwOnInvalidJsonPatch } from '../config'
 import { getDataByKey, setDataByKey } from '../services/dynamodb'
 import status from '../utils/status'
-import { APIGatewayEvent, APIGatewayProxyResult, PatchOperation } from '../types'
+import { AccountPreference, APIGatewayEvent, APIGatewayProxyResult, PatchOperation } from '../types'
 import { extractJsonPatchFromEvent, getIdFromEvent } from '../utils/events'
 import { log, logError } from '../utils/logging'
 
-const patchById = async (accountId: string, patchOperations: PatchOperation[]): Promise<APIGatewayProxyResult> => {
-  const preference = await getDataByKey(accountId)
+const applyJsonPatch = async (preference: AccountPreference, accountId: string, patchOperations: PatchOperation[]) => {
   const updatedPreference = applyPatch(
     preference,
     patchOperations,
@@ -21,6 +20,19 @@ const patchById = async (accountId: string, patchOperations: PatchOperation[]): 
   } catch (error) {
     logError(error)
     return status.INTERNAL_SERVER_ERROR
+  }
+}
+
+const patchById = async (accountId: string, patchOperations: PatchOperation[]): Promise<APIGatewayProxyResult> => {
+  try {
+    const preference = await getDataByKey(accountId)
+    try {
+      return await applyJsonPatch(preference, accountId, patchOperations)
+    } catch (error) {
+      return { ...status.BAD_REQUEST, body: JSON.stringify({ message: error.message }) }
+    }
+  } catch {
+    return status.NOT_FOUND
   }
 }
 
