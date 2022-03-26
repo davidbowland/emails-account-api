@@ -1,5 +1,5 @@
-import { key, preferences } from '../__mocks__'
 import { deleteDataByKey, getDataByKey, scanData, setDataByKey } from '@services/dynamodb'
+import { key, preferences } from '../__mocks__'
 
 const mockDeleteItem = jest.fn()
 const mockGetItem = jest.fn()
@@ -61,7 +61,7 @@ describe('dynamodb', () => {
 
     test('expect data parsed and returned', async () => {
       const result = await scanData()
-      expect(result).toEqual([{ id: key, data: preferences }])
+      expect(result).toEqual([{ data: preferences, id: key }])
     })
 
     test('expect empty object with no data returned', async () => {

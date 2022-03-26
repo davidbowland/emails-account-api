@@ -1,6 +1,6 @@
+import { APIGatewayEvent, APIGatewayProxyResult } from '../types'
 import { defaultDynamodbKey } from '../config'
 import { getDataByKey } from '../services/dynamodb'
-import { APIGatewayEvent, APIGatewayProxyResult } from '../types'
 import { getIdFromEvent } from '../utils/events'
 import { log } from '../utils/logging'
 import status from '../utils/status'

@@ -1,8 +1,8 @@
-import { getDataByKey, setDataByKey } from '../services/dynamodb'
-import status from '../utils/status'
-import { AccountPreference, APIGatewayEvent, APIGatewayProxyResult } from '../types'
+import { APIGatewayEvent, APIGatewayProxyResult, AccountPreference } from '../types'
 import { extractAccountPreferenceFromEvent, getIdFromEvent } from '../utils/events'
+import { getDataByKey, setDataByKey } from '../services/dynamodb'
 import { log, logError } from '../utils/logging'
+import status from '../utils/status'
 
 const getResponse = async (accountId: string): Promise<{ statusCode: number }> => {
   try {

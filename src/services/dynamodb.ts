@@ -1,7 +1,7 @@
 import { DynamoDB } from 'aws-sdk'
 
+import { AccountPreference, Accounts } from '../types'
 import { dynamodbTableName } from '../config'
-import { Accounts, AccountPreference } from '../types'
 
 const dynamodb = new DynamoDB({ apiVersion: '2012-08-10' })
 
@@ -37,7 +37,7 @@ export const getDataByKey = (key: string): Promise<AccountPreference> =>
 /* Scan for items */
 
 const getItemsFromScan = (response: DynamoDB.Types.ScanOutput): Accounts[] | undefined =>
-  response.Items?.map((item) => ({ id: item.Account.S, data: JSON.parse(item.Data.S) }))
+  response.Items?.map((item) => ({ data: JSON.parse(item.Data.S), id: item.Account.S }))
 
 export const scanData = (): Promise<Accounts[]> =>
   dynamodb

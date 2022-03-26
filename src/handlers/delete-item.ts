@@ -1,7 +1,7 @@
-import { deleteDataByKey, getDataByKey } from '../services/dynamodb'
 import { APIGatewayEvent, APIGatewayProxyResult } from '../types'
-import { getIdFromEvent } from '../utils/events'
+import { deleteDataByKey, getDataByKey } from '../services/dynamodb'
 import { log, logError } from '../utils/logging'
+import { getIdFromEvent } from '../utils/events'
 import status from '../utils/status'
 
 const deleteData = async (accountId: string, data: any): Promise<APIGatewayProxyResult> => {

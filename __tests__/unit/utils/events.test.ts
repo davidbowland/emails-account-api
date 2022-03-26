@@ -1,9 +1,9 @@
-import { key, jsonPatchOperations, preferences } from '../__mocks__'
+import { extractAccountPreferenceFromEvent, extractJsonPatchFromEvent, getIdFromEvent } from '@utils/events'
+import { jsonPatchOperations, key, preferences } from '../__mocks__'
+import { APIGatewayEvent } from '@types'
 import getEventJson from '@events/get-by-id.json'
 import patchEventJson from '@events/patch-item.json'
 import putEventJson from '@events/put-item.json'
-import { APIGatewayEvent } from '@types'
-import { extractAccountPreferenceFromEvent, extractJsonPatchFromEvent, getIdFromEvent } from '@utils/events'
 
 describe('events', () => {
   describe('extractAccountPreferenceFromEvent', () => {

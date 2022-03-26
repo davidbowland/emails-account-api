@@ -1,4 +1,4 @@
-import { AccountPreference, APIGatewayEvent, PatchOperation } from '../types'
+import { APIGatewayEvent, AccountPreference, PatchOperation } from '../types'
 
 /* AccountPreferences */
 
