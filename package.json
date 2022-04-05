@@ -11,9 +11,9 @@
     "clean": "rm -rf dist coverage && NODE_ENV=test npm ci",
     "deploy": "npm run build && ./scripts/deploy.sh",
     "lint": "prettier --write . && eslint --fix . --resolve-plugins-relative-to .",
-    "prepare": "if [ \"$HUSKY\" != \"0\" ]; then husky install ; fi",
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install ; fi",
     "start": "npm run build && npm run quick-start",
-    "quick-start": "tsc && HUSKY=0 sam build && DYNAMODB_TABLE_NAME=emails-account-api-test sam local start-api --region us-east-1",
+    "quick-start": "tsc && ./scripts/runLocal.sh",
     "test": "npm run lint && jest --colors"
   },
   "lint-staged": {
