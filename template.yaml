@@ -84,6 +84,7 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
 
   DeleteItemLogGroup:
     Type: AWS::Logs::LogGroup
@@ -91,6 +92,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${DeleteItemFunction}
       RetentionInDays: 30
+      Tags:
+        - Key: 'created-by'
+          Value: 'emails-account-api'
+        - Key: 'created-for'
+          Value: 'emails'
+        - Key: 'environment'
+          Value: !Ref Environment
 
   DeleteItemLogGroupSubscription:
     Type: AWS::Logs::SubscriptionFilter
@@ -131,6 +139,7 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
 
   GetAllItemsLogGroup:
     Type: AWS::Logs::LogGroup
@@ -138,6 +147,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${GetAllItemsFunction}
       RetentionInDays: 30
+      Tags:
+        - Key: 'created-by'
+          Value: 'emails-account-api'
+        - Key: 'created-for'
+          Value: 'emails'
+        - Key: 'environment'
+          Value: !Ref Environment
 
   GetAllItemsLogGroupSubscription:
     Type: AWS::Logs::SubscriptionFilter
@@ -178,6 +194,7 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
 
   GetByIdLogGroup:
     Type: AWS::Logs::LogGroup
@@ -185,6 +202,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${GetByIdFunction}
       RetentionInDays: 30
+      Tags:
+        - Key: 'created-by'
+          Value: 'emails-account-api'
+        - Key: 'created-for'
+          Value: 'emails'
+        - Key: 'environment'
+          Value: !Ref Environment
 
   GetByIdLogGroupSubscription:
     Type: AWS::Logs::SubscriptionFilter
@@ -225,6 +249,7 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
 
   PatchLogGroup:
     Type: AWS::Logs::LogGroup
@@ -232,6 +257,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${PatchItemFunction}
       RetentionInDays: 30
+      Tags:
+        - Key: 'created-by'
+          Value: 'emails-account-api'
+        - Key: 'created-for'
+          Value: 'emails'
+        - Key: 'environment'
+          Value: !Ref Environment
 
   PatchGroupSubscription:
     Type: AWS::Logs::SubscriptionFilter
@@ -272,6 +304,7 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
 
   PutLogGroup:
     Type: AWS::Logs::LogGroup
@@ -279,6 +312,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${PutItemFunction}
       RetentionInDays: 30
+      Tags:
+        - Key: 'created-by'
+          Value: 'emails-account-api'
+        - Key: 'created-for'
+          Value: 'emails'
+        - Key: 'environment'
+          Value: !Ref Environment
 
   PutGroupSubscription:
     Type: AWS::Logs::SubscriptionFilter
@@ -301,3 +341,4 @@ Resources:
       Tags:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
+        'environment': !Ref Environment
