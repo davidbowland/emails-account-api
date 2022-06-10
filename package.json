@@ -4,7 +4,7 @@
   "description": "Handles emails accounts",
   "version": "1.17.0",
   "engines": {
-    "node": "^14.0.0"
+    "node": "^16.0.0"
   },
   "scripts": {
     "build": "npm run clean && tsc && cp package*.json dist/ && cd dist/ && HUSKY=0 NODE_ENV=production npm ci",
@@ -14,7 +14,7 @@
     "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install ; fi",
     "start": "npm run build && npm run quick-start",
     "quick-start": "tsc && ./scripts/runLocal.sh",
-    "test": "npm run lint && jest --colors"
+    "test": "jest --colors"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
