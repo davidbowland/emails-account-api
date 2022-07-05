@@ -63,7 +63,6 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 30
       Description: emails-account-api delete by ID
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -85,6 +84,8 @@ Resources:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
         'environment': !Ref Environment
+      Timeout: 10
+      Tracing: Active
 
   DeleteItemLogGroup:
     Type: AWS::Logs::LogGroup
@@ -118,7 +119,6 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 30
       Description: emails-account-api get all items
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -140,6 +140,8 @@ Resources:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
         'environment': !Ref Environment
+      Timeout: 30
+      Tracing: Active
 
   GetAllItemsLogGroup:
     Type: AWS::Logs::LogGroup
@@ -173,7 +175,6 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 30
       Description: emails-account-api get by ID
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -195,6 +196,8 @@ Resources:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
         'environment': !Ref Environment
+      Timeout: 10
+      Tracing: Active
 
   GetByIdLogGroup:
     Type: AWS::Logs::LogGroup
@@ -228,7 +231,6 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 30
       Description: emails-account-api patch item
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -250,6 +252,8 @@ Resources:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
         'environment': !Ref Environment
+      Timeout: 10
+      Tracing: Active
 
   PatchLogGroup:
     Type: AWS::Logs::LogGroup
@@ -283,7 +287,6 @@ Resources:
       Architectures:
         - x86_64
       MemorySize: 128
-      Timeout: 30
       Description: emails-account-api put item
       Policies:
         - AWSLambdaBasicExecutionRole
@@ -305,6 +308,8 @@ Resources:
         'created-by': 'emails-account-api'
         'created-for': 'emails'
         'environment': !Ref Environment
+      Timeout: 10
+      Tracing: Active
 
   PutLogGroup:
     Type: AWS::Logs::LogGroup
